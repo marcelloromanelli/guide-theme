@@ -1,0 +1,6 @@
+{{ $original_image := (.Page.Resources.GetMatch  (index "*.jpg")) }}
+{{ if $original_image }}
+{{ $image := $original_image.Fill "1250x600" }}
+<div class="container w-full mx-auto bg-white lg:bg-fixed bg-cover mt-8 rounded"
+    style="background-image:url('{{ $image.RelPermalink }}'); height: 60vh;"></div>
+{{ end }}

@@ -1,0 +1,84 @@
+.content-wrapper * {
+    margin-bottom: 20px;
+    font-family: Georgia,serif;
+}
+
+.content-wrapper h1,
+.content-wrapper h2,
+.content-wrapper h3,
+.content-wrapper h4,
+.content-wrapper h5,
+.content-wrapper h6 {
+    margin-bottom: 10px
+}
+
+
+.content-wrapper ul li {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+.content-wrapper table {
+    text-align: left;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6
+}
+
+.content-wrapper table th,.content-wrapper table td {
+    padding: .75rem;
+    vertical-align: top;
+    border: 1px solid #dee2e6
+}
+
+.content-wrapper table thead {
+    background: #faf1ed
+}
+
+.content-wrapper table tbody {
+    background: #fcf7f5
+}
+
+.content-wrapper table tbody td {
+    text-align: left!important
+}
+
+.content-wrapper blockquote {
+    padding: 20px;
+    background: #fcf7f5;
+    border-left: 3px solid #aa1844
+}
+
+.content-wrapper blockquote p {
+    margin-bottom: 0;
+    color: #1c1c1c;
+    font-style: italic!important
+}
+
+.content-wrapper pre {
+    padding: 10px 20px;
+    background: #fcf7f5
+}
+
+.content-wrapper pre code {
+    border: 0;
+    background: 0 0;
+    padding: 0
+}
+
+.content-wrapper a {
+    color: #aa1844
+}
+
+.content-wrapper a:hover {
+    text-decoration: underline
+}
+
+.content-wrapper code {
+    padding: 3px 5px;
+    background: #fcf7f5;
+    border: 1px solid #dedede;
+    border-radius: 3px;
+    color: #1c1c1c
+}

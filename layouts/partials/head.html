@@ -1,0 +1,36 @@
+<head>
+    <meta charset="utf-8">
+    {{ if .IsHome }}
+    <title>{{ i18n "subtitle" }} | {{ .Site.Title }}</title>
+    {{ else }}
+    <title>{{ with .Title }}{{ . }} | {{ end }}{{ .Site.Title }}</title>
+    {{ end }}
+
+    {{ "<!-- mobile responsive meta -->" | safeHTML }}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=7">
+
+    {{ if .Description }}
+    <meta name="description" content="{{ .Description }}">
+    {{ else if .Summary }}
+    <meta name="description" content="{{.Summary }}">
+    {{ else }}
+    <meta name="description" content="{{ i18n "description" }}">
+    {{ end }}
+
+    {{ hugo.Generator }}
+
+    {{ range .AlternativeOutputFormats -}}
+    <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink | safeURL }}">
+    {{ end -}}
+
+    <meta name="robots" content="index,follow" />
+    <meta name="googlebot" content="index,follow" />
+
+    {{ partial "head/lang.html" . }}
+    {{ partial "head/style.html" . }}
+    {{ partial "head/favicon.html" . }}
+    {{ partial "head/schema.html" . }}
+    {{ partial "head/opengraph.html" . }}
+    {{ partial "head/gtm.html" . }}
+</head>

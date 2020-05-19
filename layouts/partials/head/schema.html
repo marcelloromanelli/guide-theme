@@ -1,0 +1,43 @@
+{{ if or (eq .Kind "section") (eq .Kind "page") }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ .Title }},
+  {{ $original_image := (.Page.Resources.GetMatch  (index "index.jpg")) }}
+  {{ if $original_image }}
+  "image": {{ $original_image.Permalink }},
+  {{ end }}
+  "datePublished": {{ .PublishDate }},
+  "dateModified": {{ .Lastmod }},
+  "author": {
+    "@type": "Person",
+    "name": {{ .Site.Params.author }}
+  },
+  "mainEntityOfPage": { "@type": "WebPage" },
+   "publisher": {
+    "@type": "Organization",
+    "name": {{ .Site.Title }},
+    "logo": {
+      "@type": "ImageObject",
+      "url": {{ .Site.Params.logo | absURL }}
+    }
+  },
+  "description": {{ .Summary | plainify | safeHTML }},
+  "keywords": [{{ range $i, $e := .Params.tags }}{{ if $i }}, {{ end }}{{ $e }}{{ end }}]
+}
+</script>
+{{ end }}
+
+<script type="application/ld+json">
+{
+"@context": "https://schema.org",
+"@type": "Organization",
+"name": {{ .Site.Title }},
+"url": {{ .Site.BaseURL }},
+"sameAs": [
+"https://www.facebook.com/yourguidebarcelona-106979137658416",
+"https://www.instagram.com/yourguidebarcelona"
+]
+}
+</script>

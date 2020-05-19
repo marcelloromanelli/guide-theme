@@ -1,0 +1,24 @@
+{{ define "main" }}
+
+<section class="section-padding">
+    <div class="container mx-auto">
+        <div class="row justify-content-lg-center">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                {{- if .Sections -}}
+                <div class="row justify-content-lg-center">
+                    <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+                        {{ range .Sections }}
+                        {{- if .Data.Pages -}}
+                        {{- range $i, $e := .Data.Pages -}}
+                        {{- partial "big-card.html" . -}}
+                        {{ end }}
+                        {{ end }}
+                        {{ end }}
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</section>
+{{ end }}

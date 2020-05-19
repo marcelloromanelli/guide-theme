@@ -1,0 +1,20 @@
+<a class="bg-white flex flex-wrap shadow-lg rounded-md my-5 lg:mx-8"  href="{{ .Permalink }}">
+    <div class="w-full lg:w-3/5">
+        {{$original_image := (.Resources.GetMatch (index "*.jpg")) }}
+        {{ if $original_image }}
+        {{ $placeholder := ($original_image.Resize "16x10 q20") | images.Filter (images.GaussianBlur 8) }}
+        {{ $image := $original_image.Fill "710x289" }}
+        <div class="h-64 bg-cover lg:h-full rounded-t-md lg:rounded-t-none lg:rounded-l-md"
+            style="background-image:url('{{ $image.RelPermalink }}')">
+        </div>
+        {{ end}}
+    </div>
+    
+    <div class="w-full lg:w-2/5 p-4 lg:px-6 lg:py-12">
+        <h2 class="text-3xl text-gray-800 font-bold">{{ .Title | markdownify }}</h2>
+        <p class="text-sm text-gray-600 flex items-center">
+            {{ i18n "readingTime" .ReadingTime }}
+        </p>
+        <p class="mt-4 text-gray-600">{{ .Content | truncate 300 | plainify | htmlUnescape }}</p>
+    </div>
+</a>
