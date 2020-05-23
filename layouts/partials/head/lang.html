@@ -1,7 +1,7 @@
 {{ "<!--Languages-->" | safeHTML }}
 <meta name="language" content="{{ .Language.LanguageName }}">
 
-<link rel="alternate" hreflang="{{ .Language.LanguageName }}" href="{{ .Permalink }}" title="{{ .Language.LanguageName }}">
+<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" title="{{ .Language.LanguageName }}">
 {{ if .IsTranslated }}
 {{ range .Translations }}
 <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" title="{{ .Language.LanguageName }}">
