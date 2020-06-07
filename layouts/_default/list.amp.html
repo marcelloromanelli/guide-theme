@@ -6,9 +6,9 @@
             <h1 class="font-bold break-normal text-4xl md:text-6xl mb-8">{{ .Title | markdownify }}</h1>
         </div>
 
-        {{- partial "header-image.html" . -}}
+        {{- partial "header-image.amp.html" . -}}
 
-        <div class="container max-w-5xl mx-auto -mt-32">
+        <div class="container max-w-5xl mx-auto">
             <div class="mx-0 sm:mx-6">
                 <div class="content-wrapper bg-white w-full p-8 md:px-24 md:py-16 text-xl text-gray-800 leading-normal rounded">
                     {{ .Content }}
