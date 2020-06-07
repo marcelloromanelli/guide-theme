@@ -1,0 +1,25 @@
+<!doctype html>
+<html amp lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    {{ with .OutputFormats.Get "html" }}
+      <link rel="canonical" href="{{ .Permalink }}" >
+    {{ end }}
+    
+    {{ partial "amp/boilerplate.html" . }}
+    {{ partial "amp/styles.html" . }}
+    
+    {{ partial "head/lang.html" . }}
+    {{ partial "head/favicon.html" . }}
+    {{ partial "head/schema.html" . }}
+  </head>
+
+  <body class="flex flex-col min-h-screen">
+      {{- partial "header.html" . -}}
+      <main class="flex-1 mx-4 md:mx-12 lg:mx-24 mt-4 sm:mt-16">
+      {{- block "main" . }}{{- end }}
+      </main>
+      {{- partial "amp/footer.html" . -}}
+  </body>
+</html>

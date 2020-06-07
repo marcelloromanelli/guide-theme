@@ -41,7 +41,7 @@
 }
 
 .content-wrapper table tbody td {
-    text-align: left!important
+    text-align: left;
 }
 
 .content-wrapper blockquote {
@@ -53,7 +53,7 @@
 .content-wrapper blockquote p {
     margin-bottom: 0;
     color: #1c1c1c;
-    font-style: italic!important
+    font-style: italic
 }
 
 .content-wrapper pre {
@@ -81,4 +81,16 @@
     border: 1px solid #dedede;
     border-radius: 3px;
     color: #1c1c1c
+}
+
+input#nav-toggle:checked~label#show-button {
+    display: none;
+}
+
+input#nav-toggle:checked~label#hide-button {
+    display: flex;
+}
+
+input#nav-toggle:checked~#nav-menu {
+    display: block;
 }
