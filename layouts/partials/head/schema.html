@@ -4,7 +4,7 @@
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "headline": {{ .Title }},
-  {{ $original_image := (.Page.Resources.GetMatch  (index "index.jpg")) }}
+  {{ $original_image := (.Page.Resources.GetMatch  (index "*.jpg")) }}
   {{ if $original_image }}
   "image": {{ $original_image.Permalink }},
   {{ end }}
@@ -12,7 +12,7 @@
   "dateModified": {{ .Lastmod }},
   "author": {
     "@type": "Person",
-    "name": {{ .Site.Params.author }}
+    "name": "Samira Blank"
   },
   "mainEntityOfPage": { "@type": "WebPage" },
    "publisher": {
