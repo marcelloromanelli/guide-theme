@@ -6,6 +6,12 @@
     {{ with .OutputFormats.Get "html" }}
       <link rel="canonical" href="{{ .Permalink }}" >
     {{ end }}
+
+    {{ if .IsHome }}
+      <title>{{ i18n "subtitle" }} | {{ .Site.Title }}</title>
+    {{ else }}
+      <title>{{ with .Title }}{{ . }} | {{ end }}{{ .Site.Title }}</title>
+    {{ end }}
     
     {{ partial "amp/boilerplate.html" . }}
     {{ partial "amp/styles.html" . }}
