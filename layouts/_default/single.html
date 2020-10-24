@@ -9,8 +9,10 @@
         {{- partial "header-image.html" . -}}
 
         <div class="container max-w-5xl mx-auto -mt-32">
-            <div class="mx-0 sm:mx-6">
+            <div class="mx-0 sm:mx-6">             
                 <div class="content-wrapper bg-white w-full p-8 md:px-24 md:py-16 text-xl text-gray-800 leading-normal rounded">
+                    {{- partial "article-infobox.html" . -}}
+
                     {{ .Content }}
                 </div>
 

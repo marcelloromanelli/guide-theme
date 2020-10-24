@@ -7,3 +7,18 @@
   background-size: 100% 100%;
   background-image: url("../icons/001-airplane.svg");
 }
+
+.ico-clock {
+  background-size: 100% 100%;
+  background-image: url("../icons/048-clock.svg");
+}
+
+.ico-map-pin {
+  background-size: 100% 100%;
+  background-image: url("../icons/042-mappin.svg");
+}
+
+.ico-plane-tickets {
+  background-size: 100% 100%;
+  background-image: url("../icons/003-plane-tickets.svg");
+}

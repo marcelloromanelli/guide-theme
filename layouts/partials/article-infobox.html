@@ -1,0 +1,35 @@
+<div class="bg-white flex flex-wrap flex-col xl:flex-row content-around mb-0">
+    {{ with .Params.address }}
+    <div class="align-top w-full xl:w-1/2 flex">
+        <span class="ico-map-pin w-2/12 h-12 mr-4 "></span>
+        <div class="w-10/12">
+            {{ replace . "," "<br />" | safeHTML }}
+            <br />
+            <a target="_blank"
+            href="https://maps.google.com/maps?f=d&hl=en&saddr=&daddr={{  replace . " " "+" }}">Click here to get directions</a>
+        </div>
+    </div>
+    {{ end }}
+
+    {{ if .Params.opening_hours }}
+    <div class="align-top w-full xl:w-1/2 flex">
+        <span class="ico-clock w-2/12 h-12 mr-4"></span>
+        <div class="w-10/12">
+            {{ range .Params.opening_hours }}
+                {{ . }}<br />
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+</div>
+
+{{ with .Params.ticket_url }}
+<div class="align-top w-full xl:w-1/2 flex">
+    <span class="ico-plane-tickets w-2/12 h-12 mr-4"></span>
+    <div class="w-10/12">
+        <a href="{{ . }}" target="_blank">Safely buy your ticket here!</a>
+        <br />
+        <small class="text-gray-500">Cancel up to <strong>24 hours</strong> in advance to receive a full refund.</small>
+    </div>
+</div>
+{{ end }}
