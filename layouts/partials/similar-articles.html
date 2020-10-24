@@ -1,7 +1,8 @@
 {{ $related := .Site.RegularPages.Related . | first 5 }}
 {{ with $related }}
     <hr />
-    <h2 class="text-center p-8">You might also like</h2>
+
+    <h2 class="px-8 flex content-center items-center">You're going to love these articles<span class="ico-airplane ml-4 w-48 h-48"></span></h2>
 
     {{ range . }}
     {{- partial "horizontal-card.html" . -}}
