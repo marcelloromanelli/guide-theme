@@ -1,0 +1,9 @@
+{{ $related := .Site.RegularPages.Related . | first 5 }}
+{{ with $related }}
+    <hr />
+    <h2 class="text-center p-8">You might also like</h2>
+
+    {{ range . }}
+    {{- partial "horizontal-card.html" . -}}
+    {{ end }}
+{{ end }}
