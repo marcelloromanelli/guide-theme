@@ -50,15 +50,32 @@ body {
 }
 
 .content-wrapper blockquote {
-  padding: 20px;
-  background: #fcf7f5;
-  border-left: 3px solid #aa1844;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  padding: 2rem 1.5rem;
+  border: 0.125rem solid #edb2c3e7;
+  border-radius: 6px;
+  background-color: #f5c1d007;
+  margin: 3rem 0;
+}
+
+.content-wrapper blockquote::before {
+  content: "";
+  background-size: 100% 100%;
+  background-image: url("../icons/006-signboard.svg");
+  width: 6rem;
+  height: 6rem;
+  margin-right: 1rem;
+  min-width: 6rem;
 }
 
 .content-wrapper blockquote p {
   margin-bottom: 0;
-  color: #1c1c1c;
-  font-style: italic;
+  color: #2d3748;
+  align-items: center;
+  font-size: 1.75rem;
 }
 
 .content-wrapper pre {
