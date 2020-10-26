@@ -121,3 +121,9 @@ input#nav-toggle:checked ~ label#hide-button {
 input#nav-toggle:checked ~ #nav-menu {
   display: block;
 }
+
+.header-title {
+  text-shadow: 0 0 10px #666;
+  line-height: 1;
+  opacity: 0.9;
+}

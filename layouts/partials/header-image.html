@@ -1,6 +1,13 @@
 {{ $original_image := (.Page.Resources.GetMatch  (index "*.jpg")) }}
 {{ if $original_image }}
 {{ $image := $original_image.Fill "1250x600" }}
-<div class="container w-full mx-auto bg-white lg:bg-fixed bg-cover mt-8 rounded"
-    style="background-image:url('{{ $image.RelPermalink }}'); height: 60vh;"></div>
+<div 
+    class="w-full bg-white lg:bg-fixed bg-cover mt-12 lg:mt-24 flex items-center justify-center"
+    style="background-image:url('{{ $image.RelPermalink }}'); height: 75vh;"
+>
+        <h1 class="font-bold break-normal text-gray-100 header-title text-center p-8 lg:text-6xl">
+            {{ .Title | markdownify }}
+        </h1>
+</div>
+
 {{ end }}
