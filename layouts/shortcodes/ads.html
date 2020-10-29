@@ -1,0 +1,10 @@
+<div id="{{ .Get "id" }}" >
+    <script type="text/javascript">
+        try {
+            window._mNHandle.queue.push(function () {
+                window._mNDetails.loadTag('{{ .Get "id" }}', '{{ .Get "size" }}', '{{ .Get "id" }}');
+            });
+        }
+        catch (error) { }
+    </script>
+</div>

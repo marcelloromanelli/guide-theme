@@ -1,0 +1,29 @@
+<ins 
+    class="bookingaff" 
+    data-aid="{{ .Site.Params.affiliate.booking }}" 
+    data-target_aid="{{ .Site.Params.affiliate.booking }}" 
+    data-prod="map" 
+    data-width="100%" 
+    data-height="590"
+    data-lang="{{ .Site.Language.Lang }}" 
+    data-dest_id="0" 
+    data-dest_type="landmark" 
+    data-latitude="41.3850639" 
+    data-longitude="2.1734035"
+    data-landmark_name="Barcelona" 
+    data-mwhsb="0" 
+    data-address="Barcelona, Spain"
+>
+    <!-- Anything inside will go away once widget is loaded. -->
+    <a href="//www.booking.com?aid={{ .Site.Params.affiliate.booking }}">Booking.com</a>
+</ins>
+
+<script type="text/javascript">
+    (function (d, sc, u) {
+        var s = d.createElement(sc), p = d.getElementsByTagName(sc)[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = u + '?v=' + (+new Date());
+        p.parentNode.insertBefore(s, p);
+    })(document, 'script', '//aff.bstatic.com/static/affiliate_base/js/flexiproduct.js');
+</script>

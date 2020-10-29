@@ -1,0 +1,11 @@
+<div 
+    data-gyg-href="https://widget.getyourguide.com/default/activites.frame" 
+    data-gyg-locale-code="{{ i18n "gygLocale" }}"
+    data-gyg-widget="activities" 
+    data-gyg-number-of-items="{{ .Get "items" }}" 
+    data-gyg-partner-id="{{ .Site.Params.affiliate.getyourguide }}"
+
+    {{ with .Get "tours" }}data-gyg-tour-ids="{{ . }}"{{ end }}
+    {{ with .Get "query" }}data-gyg-q="{{ . }}"{{ end }}
+>
+</div>

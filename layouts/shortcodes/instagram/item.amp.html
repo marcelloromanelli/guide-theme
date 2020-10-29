@@ -1,0 +1,11 @@
+{{- $pc := .Page.Site.Config.Privacy.Instagram -}}
+{{- $sc := .Page.Site.Config.Services.Instagram -}}
+{{- if not $pc.Disable -}}
+{{- $id := .Get 0 -}}
+
+{{- $mediaURL := printf "https://instagram.com/p/%s/" $id | safeURL -}}
+<div class="w-full">
+    <amp-instagram data-shortcode="{{ $id }}" width="1" height="1" layout="responsive">
+    </amp-instagram>
+</div>
+{{- end -}}

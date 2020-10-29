@@ -1,0 +1,17 @@
+{{ printf "<%s>" (.Get 0) | safeHTML }}
+{{ $.Scratch.Set "content" .Inner }}
+
+{{ range where $.Site.Pages.ByPublishDate.Reverse ".Params.seo" "ne" nil }}
+    {{ $match := false }}
+    {{ $tmpPage := . }}
+    {{ range $seoParam := .Params.seo }}
+        {{ $content := ($.Scratch.Get "content") }}
+        {{if and (not $match) (gt (len ($content | findRE $seoParam)) 0) (eq (len ($content | findRE (printf "<a[^>]* title=\"(.*%s.*)\"" $seoParam))) 0) }}
+            {{ $match = true }}
+            {{ $.Scratch.Set "content" ($content | replaceRE $seoParam (printf "<a href=\"%s\" title=\"%s\">%s</a>" $tmpPage.RelPermalink $tmpPage.Title $seoParam ) )  }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+
+{{ $.Scratch.Get "content" | safeHTML }}
+{{ printf "</%s>" (.Get 0) | safeHTML }}
