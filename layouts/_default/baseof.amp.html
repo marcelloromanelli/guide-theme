@@ -22,10 +22,13 @@
   </head>
 
   <body class="flex flex-col min-h-screen">
-      {{- partial "header.html" . -}}
-      <main class="flex-1 mx-4 md:mx-12 lg:mx-24 mt-4 sm:mt-16">
+    {{- partial "dev-size-indicator.html" . -}}
+    {{- partial "header.html" . -}}
+    {{- partial "header-image.html" . -}}
+    <main class="flex-1 mx-4 md:mx-12 lg:mx-24 mt-4 sm:mt-16">
       {{- block "main" . }}{{- end }}
-      </main>
-      {{- partial "amp/footer.html" . -}}
+    </main>
+    {{/* - partial "dev-parameters.html" . - */}}
+    {{- partial "footer.html" . -}}
   </body>
 </html>
