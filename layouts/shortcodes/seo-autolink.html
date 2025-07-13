@@ -1,14 +1,20 @@
 {{ printf "<%s>" (.Get 0) | safeHTML }}
 {{ $.Scratch.Set "content" .Inner }}
+{{ $.Scratch.Set "linkCount" 0 }}
 
 {{ range where $.Site.Pages.ByPublishDate.Reverse ".Params.seo" "ne" nil }}
     {{ $match := false }}
     {{ $tmpPage := . }}
-    {{ range $seoParam := .Params.seo }}
-        {{ $content := ($.Scratch.Get "content") }}
-        {{if and (not $match) (gt (len ($content | findRE $seoParam)) 0) (eq (len ($content | findRE (printf "<a[^>]* title=\"(.*%s.*)\"" $seoParam))) 0) }}
-            {{ $match = true }}
-            {{ $.Scratch.Set "content" ($content | replaceRE $seoParam (printf "<a href=\"%s\" title=\"%s\">%s</a>" $tmpPage.RelPermalink $tmpPage.Title $seoParam ) )  }}
+    {{ $currentLinkCount := $.Scratch.Get "linkCount" }}
+    
+    {{ if lt $currentLinkCount 3 }}
+        {{ range $seoParam := .Params.seo }}
+            {{ $content := ($.Scratch.Get "content") }}
+            {{if and (not $match) (gt (len ($content | findRE $seoParam)) 0) (eq (len ($content | findRE (printf "<a[^>]* title=\"(.*%s.*)\"" $seoParam))) 0) (ne $tmpPage.RelPermalink $.Page.RelPermalink) }}
+                {{ $match = true }}
+                {{ $.Scratch.Set "content" ($content | replaceRE $seoParam (printf "<a href=\"%s\" title=\"%s\" class=\"text-red-800 hover:underline\">%s</a>" $tmpPage.RelPermalink $tmpPage.Title $seoParam ) )  }}
+                {{ $.Scratch.Set "linkCount" (add $currentLinkCount 1) }}
+            {{ end }}
         {{ end }}
     {{ end }}
 {{ end }}

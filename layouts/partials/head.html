@@ -24,6 +24,12 @@
 
     {{ hugo.Generator }}
 
+    {{ "<!-- Canonical URL -->" | safeHTML }}
+    <link rel="canonical" href="{{ .Permalink }}" />
+    
+    {{ "<!-- XML Sitemap -->" | safeHTML }}
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ "/sitemap.xml" | absURL }}" />
+
     {{ range .AlternativeOutputFormats -}}
     <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink | safeURL }}">
     {{ end -}}

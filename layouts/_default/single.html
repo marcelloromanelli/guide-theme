@@ -6,7 +6,10 @@
                 <div class="content-wrapper bg-white w-full p-8 md:px-24 md:py-16 text-xl text-gray-800 leading-normal rounded">
                     {{- partial "article-infobox.html" . -}}
                     {{ .Content }}
+                    {{- partial "contextual-links.html" . -}}
                 </div>
+
+                {{- partial "next-prev-nav.html" . -}}
 
                 <div class="bg-white w-full md:px-24 text-xl text-gray-800 leading-normal rounded">
                     {{- partial "similar-articles.html" . -}}
