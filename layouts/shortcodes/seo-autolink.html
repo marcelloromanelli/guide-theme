@@ -1,4 +1,5 @@
-{{ printf "<%s>" (.Get 0) | safeHTML }}
+{{ $tag := .Get 0 }}
+{{ with $tag }}{{ printf "<%s>" . | safeHTML }}{{ end }}
 {{ $.Scratch.Set "content" .Inner }}
 {{ $.Scratch.Set "linkCount" 0 }}
 
@@ -20,4 +21,4 @@
 {{ end }}
 
 {{ $.Scratch.Get "content" | safeHTML }}
-{{ printf "</%s>" (.Get 0) | safeHTML }}
+{{ with $tag }}{{ printf "</%s>" . | safeHTML }}{{ end }}
