@@ -1,2 +1,11 @@
 {{ partial "footer/lang-switcher.html" . }}
 {{ partial "footer/gtm.html" . }}
+{{ partial "consent.html" . }}
+{{- $csLang := .Site.Language.Lang -}}
+{{- $cs := dict "en" "Cookie settings" "es" "Configuración de cookies" "it" "Impostazioni cookie" -}}
+{{- $csLabel := index $cs $csLang -}}
+{{- if not $csLabel }}{{ $csLabel = index $cs "en" }}{{ end -}}
+<div class="text-center text-sm text-gray-500 py-4">
+    <button type="button" class="underline hover:text-gray-700"
+            onclick="if(window.ygbConsentReopen)window.ygbConsentReopen();">{{ $csLabel }}</button>
+</div>

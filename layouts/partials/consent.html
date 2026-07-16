@@ -1,0 +1,50 @@
+{{- $lang := .Site.Language.Lang -}}
+{{- $strings := dict
+  "en" (dict "msg" "We use cookies to measure how the site is used." "accept" "Accept all" "essential" "Essential only")
+  "es" (dict "msg" "Usamos cookies para medir cómo se utiliza el sitio." "accept" "Aceptar todo" "essential" "Solo esenciales")
+  "it" (dict "msg" "Usiamo i cookie per misurare come viene utilizzato il sito." "accept" "Accetta tutto" "essential" "Solo essenziali")
+-}}
+{{- $t := index $strings $lang -}}
+{{- if not $t }}{{ $t = index $strings "en" }}{{ end -}}
+<div id="ygb-consent-banner" role="dialog" aria-label="Cookie consent" hidden
+     class="fixed bottom-0 inset-x-0 z-50 bg-white shadow-md border-t border-gray-200 px-4 py-3 md:px-12 lg:px-24 text-sm text-gray-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <p class="flex-1">{{ $t.msg }}</p>
+    <div class="flex gap-2 shrink-0">
+        <button type="button" id="ygb-consent-essential"
+                class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100">{{ $t.essential }}</button>
+        <button type="button" id="ygb-consent-accept"
+                class="px-4 py-2 rounded bg-black text-white hover:bg-gray-800">{{ $t.accept }}</button>
+    </div>
+</div>
+<script>
+(function () {
+    var KEY = 'ygb-consent';
+    var banner = document.getElementById('ygb-consent-banner');
+    function gtag() { window.dataLayer = window.dataLayer || []; window.dataLayer.push(arguments); }
+    function apply(analytics, ads) {
+        gtag('consent', 'update', {
+            analytics_storage: analytics ? 'granted' : 'denied',
+            ad_storage: ads ? 'granted' : 'denied',
+            ad_user_data: ads ? 'granted' : 'denied',
+            ad_personalization: ads ? 'granted' : 'denied'
+        });
+    }
+    function save(analytics, ads) {
+        try { localStorage.setItem(KEY, JSON.stringify({ analytics: analytics, ads: ads, ts: Date.now() })); } catch (e) {}
+        apply(analytics, ads);
+        if (banner) banner.hidden = true;
+    }
+    function stored() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+    if (banner) {
+        if (!stored()) banner.hidden = false;
+        var a = document.getElementById('ygb-consent-accept');
+        var e = document.getElementById('ygb-consent-essential');
+        if (a) a.addEventListener('click', function () { save(true, true); });
+        if (e) e.addEventListener('click', function () { save(false, false); });
+    }
+    window.ygbConsentReopen = function () {
+        try { localStorage.removeItem(KEY); } catch (err) {}
+        if (banner) banner.hidden = false;
+    };
+})();
+</script>

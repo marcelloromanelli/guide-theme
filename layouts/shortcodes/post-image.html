@@ -5,23 +5,37 @@
 {{ $placeholder := ($image.Resize "48x webp q20") | images.Filter (images.GaussianBlur 6) }}
 {{ $src := $image }}
 {{ $src_set := ""}}
+{{ $webp_set := ""}}
 
-{{ $src_set = (print $image.RelPermalink " " $image.Width "w") }}
-{{ $src := $image }}
+{{ $fallback := $image }}
+{{ if gt $image.Width "1024" }}
+{{ $fallback = $image.Resize "1024x q82" }}
+{{ end }}
+{{ $src := $fallback }}
+
+{{ $webp_full := $image.Resize (print $image.Width "x webp q82") }}
+{{ $src_set = (print $fallback.RelPermalink " " $fallback.Width "w") }}
+{{ $webp_set = (print $webp_full.RelPermalink " " $webp_full.Width "w") }}
 
 {{ if ge $image.Width "400"}}
-{{ $small := $image.Fill "400x" }}
+{{ $small := $image.Resize "400x q82" }}
+{{ $small_webp := $image.Resize "400x webp q82" }}
 {{ $src_set = (print $src_set ", " $small.RelPermalink " 400w") }}
+{{ $webp_set = (print $webp_set ", " $small_webp.RelPermalink " 400w") }}
 {{ end }}
 
 {{ if ge $image.Width "600"}}
-{{ $medium := $image.Fill "600x" }}
+{{ $medium := $image.Resize "600x q82" }}
+{{ $medium_webp := $image.Resize "600x webp q82" }}
 {{ $src_set = (print $src_set ", " $medium.RelPermalink " 600w") }}
+{{ $webp_set = (print $webp_set ", " $medium_webp.RelPermalink " 600w") }}
 {{ end }}
 
 {{ if gt $image.Width "825"}}
-{{ $large := $image.Fill "825x" }}
+{{ $large := $image.Resize "825x q82" }}
+{{ $large_webp := $image.Resize "825x webp q82" }}
 {{ $src_set = (print $src_set ", " $large.RelPermalink " 825w") }}
+{{ $webp_set = (print $webp_set ", " $large_webp.RelPermalink " 825w") }}
 {{ end }}
 
 {{ $border_class := "image-border" }}
@@ -30,9 +44,12 @@
 {{ end }}
 
 <figure class="{{ $border_class }} lazy">
+    <picture>
+    <source type="image/webp" data-srcset="{{ $webp_set }}" data-sizes="auto" />
     <img class="lazyload" data-sizes="auto" src="{{ $src.RelPermalink }}" {{ if $width }} width="{{$width}}" {{ end }}
         srcset="data:image/jpeg;base64,{{ $placeholder.Content | base64Encode }}" data-src="{{ $src.RelPermalink }}"
         data-srcset="{{ $src_set }}" width="{{ $image.Width }}" height="{{ $image.Height }}" alt="{{ $alt }}" />
+    </picture>
 
     {{ if .Inner }}
     <figcaption>
