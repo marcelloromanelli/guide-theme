@@ -1,4 +1,7 @@
-const themeDir = __dirname + '/../../';
+const path = require('path');
+const themeDir = path.resolve(__dirname, '../../') + '/';
+// Site root is one level above the theme dir; node_modules/tailwindcss lives there.
+const siteDir = path.resolve(themeDir, '../../') + '/';
 
 const purgecss = require('@fullhuman/postcss-purgecss')({
 
@@ -26,7 +29,9 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
 module.exports = {    
     plugins: [        
         require('postcss-import')({
-            path: [themeDir]
+            // Absolute roots so imports resolve regardless of Hugo's PostCSS temp dir:
+            //   node_modules/tailwindcss/* -> siteDir, assets/css/* -> themeDir
+            path: [siteDir, themeDir]
             }), 
         require('tailwindcss')(themeDir + 'assets/css/tailwind.config.js'),
         require('autoprefixer')({

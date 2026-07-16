@@ -11,14 +11,14 @@
             {{- $specificLang := .Lang -}}
             {{ range $currentPage.Translations }}
                 {{ if (eq .Lang $specificLang) }}
-                <a class="mr-3" href="{{ .Permalink }}">{{ .Language.LanguageName }}</a>
+                <a class="mr-3" href="{{ .Permalink }}">{{ .Language.Label }}</a>
                 {{ end }}
             {{ end }}    
         {{ else }}
         {{ if eq .Lang $pagelang }}
-            <a class="mr-3" href="{{ $currentPage.Permalink }}">{{ .Language.LanguageName }}</a>
+            <a class="mr-3" href="{{ $currentPage.Permalink }}">{{ .Language.Label }}</a>
         {{ else }}
-            <a class="mr-3" href="{{ .Permalink }}">{{ .Language.LanguageName }}</a>
+            <a class="mr-3" href="{{ .Permalink }}">{{ .Language.Label }}</a>
         {{ end }}
     {{ end }}
 

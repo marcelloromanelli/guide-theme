@@ -23,7 +23,7 @@
       "url": {{ .Site.Params.logo | absURL }}
     }
   },
-  "description": {{ .Summary | plainify | safeHTML }},
+  "description": {{ .Summary | plainify | chomp | truncate 160 }},
   "keywords": [{{ range $i, $e := .Params.tags }}{{ if $i }}, {{ end }}{{ $e }}{{ end }}]
 }
 </script>

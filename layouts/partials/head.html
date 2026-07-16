@@ -17,7 +17,7 @@
     {{ if .Description }}
     <meta name="description" content="{{ .Description }}">
     {{ else if .Summary }}
-    <meta name="description" content="{{.Summary }}">
+    <meta name="description" content="{{ .Summary | plainify | chomp | truncate 160 }}">
     {{ else }}
     <meta name="description" content="{{ i18n "description" }}">
     {{ end }}
