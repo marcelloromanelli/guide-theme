@@ -1,0 +1,11 @@
+{{- $text := or (.Get "text") (.Get 0) -}}
+{{- $url := or (.Get "url") (.Get 1) -}}
+{{- $href := printf "https://omio.sjv.io/c/%s/%s?u=%s" site.Params.affiliate.omio site.Params.affiliate.omioCampaign (urlquery $url) -}}
+
+<a
+    target="_blank"
+    rel="noopener sponsored"
+    href="{{ $href | safeURL }}"
+>
+    {{ $text }}
+</a>
