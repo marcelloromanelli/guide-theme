@@ -8,8 +8,8 @@
   {{ if $original_image }}
   "image": {{ $original_image.Permalink }},
   {{ end }}
-  "datePublished": {{ .PublishDate }},
-  "dateModified": {{ .Lastmod }},
+  {{ with .Date }}{{ if not .IsZero }}"datePublished": {{ (.Format "2006-01-02T15:04:05-07:00") }},{{ end }}{{ end }}
+  {{ with .Lastmod }}{{ if not .IsZero }}"dateModified": {{ (.Format "2006-01-02T15:04:05-07:00") }},{{ end }}{{ end }}
   "author": {
     "@type": "Person",
     "name": "Samira Blank"
@@ -28,6 +28,82 @@
 }
 </script>
 {{ end }}
+
+{{ if eq .Type "post" }}
+{{ "<!-- BreadcrumbList -->" | safeHTML }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": {{ .Site.Title }},
+      "item": {{ .Site.BaseURL | absURL }}
+    }
+    {{ $pos := 1 }}
+    {{ range (.Ancestors.Reverse) }}
+      {{ if not .IsHome }}
+        {{ $pos = add $pos 1 }}
+        ,{
+          "@type": "ListItem",
+          "position": {{ $pos }},
+          "name": {{ .Title }},
+          "item": {{ .Permalink }}
+        }
+      {{ end }}
+    {{ end }}
+    ,{
+      "@type": "ListItem",
+      "position": {{ add $pos 1 }},
+      "name": {{ .Title }},
+      "item": {{ .Permalink }}
+    }
+  ]
+}
+</script>
+{{ end }}
+
+{{ with .Params.faq }}
+{{ "<!-- FAQPage -->" | safeHTML }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {{ range $i, $e := . }}{{ if $i }},{{ end }}
+    {
+      "@type": "Question",
+      "name": {{ $e.q }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ $e.a }}
+      }
+    }
+    {{ end }}
+  ]
+}
+</script>
+{{ end }}
+
+{{ $p := . }}
+{{ with .File }}{{ if in .Path "SIGHTSEEING" }}
+{{ "<!-- TouristAttraction -->" | safeHTML }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TouristAttraction",
+  "name": {{ $p.Title }},
+  "description": {{ $p.Description | plainify }},
+  {{ $attraction_image := ($p.Resources.GetMatch (index "*.jpg")) }}
+  {{ if $attraction_image }}
+  "image": {{ $attraction_image.Permalink }},
+  {{ end }}
+  "url": {{ $p.Permalink }}
+}
+</script>
+{{ end }}{{ end }}
 
 <script type="application/ld+json">
 {
