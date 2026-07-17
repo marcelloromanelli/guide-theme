@@ -21,8 +21,21 @@
 {{/* --- Per-page state shared across all invocations on this page --- */}}
 {{- $page := .Page -}}
 
+{{/* --- Build candidate slice, score by priority + same-section bonus, sort desc.
+       Base ordering stays .ByPublishDate.Reverse so ties keep newest-first date order. --- */}}
+{{- $priority := site.Data.autolink_priority | default dict -}}
+{{- $curSection := $page.Section -}}
+{{- $candidates := slice -}}
 {{- range where $.Site.Pages.ByPublishDate.Reverse ".Params.seo" "ne" nil -}}
-    {{- $target := . -}}
+    {{- if ne .RelPermalink $page.RelPermalink -}}
+        {{- $score := index $priority .RelPermalink | default 0.0 -}}
+        {{- if and $curSection (eq .Section $curSection) -}}{{ $score = add $score 5.0 }}{{- end -}}
+        {{- $candidates = $candidates | append (dict "page" . "score" $score) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- range $cand := sort $candidates "score" "desc" -}}
+    {{- $target := $cand.page -}}
     {{- $count := $page.Scratch.Get "seoAutolinkCount" | default 0 -}}
     {{- $done := $page.Scratch.Get "seoAutolinkTargets" -}}
     {{- $already := false -}}
@@ -54,7 +67,7 @@
                     {{- $safeText := replace $orig "$" "$$" -}}
                     {{- $tgts := $page.Scratch.Get "seoAutolinkTargets" | default slice -}}
                     {{- $page.Scratch.Set "seoAutolinkTargets" ($tgts | append $target.RelPermalink) -}}
-                    {{- $anchor := printf "<a href=\"%s\" title=\"%s\" class=\"text-red-800 hover:underline\">%s</a>" $target.RelPermalink $safeTitle $safeText -}}
+                    {{- $anchor := printf "<a href=\"%s\" title=\"%s\" data-autolink=\"1\" class=\"text-red-800 hover:underline\">%s</a>" $target.RelPermalink $safeTitle $safeText -}}
                     {{/* Mask the injected anchor immediately with a placeholder. */}}
                     {{- $masks := $.Scratch.Get "masks" -}}
                     {{- $token := printf "§§L%d§§" (len $masks) -}}
