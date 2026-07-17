@@ -1,8 +1,14 @@
 {{- $tag := .Get 0 -}}
-{{- with $tag }}{{ printf "<%s>" . | safeHTML }}{{ end -}}
 
-{{/* Per-invocation working content (one paragraph). */}}
-{{- $content := .Inner -}}
+{{/* Per-invocation working content (one paragraph), rendered from markdown so
+     inline **bold**, _em_ and [links](...) format correctly. Rendering happens
+     BEFORE anchor injection, so injected <a> tags are never re-processed.
+     If the inner produced block elements (multi-paragraph), skip the outer
+     wrapper tag to avoid nesting <p> inside <p>. */}}
+{{- $content := .Inner | markdownify -}}
+{{- $hasBlocks := findRE "<(p|ul|ol|h[1-6]|blockquote)[ >]" $content 1 -}}
+{{- if $hasBlocks }}{{ $tag = "" }}{{ end -}}
+{{- with $tag }}{{ printf "<%s>" . | safeHTML }}{{ end -}}
 
 {{/* --- Mask existing anchors so params never match inside a link. Injected
        links are ALSO masked as we go, so a later param can never nest inside

@@ -259,6 +259,21 @@ a:hover{color:var(--red)}
 @media(min-width:768px){.ygb-nextprev .np-title{font-size:19px}}
 @media(max-width:520px){.ygb-nextprev .np-title{max-width:34vw}}
 
+/* FAQ accordion */
+.ygb-faq{margin:56px 0 0;border-top:2px solid var(--navy)}
+.ygb-faq-title{display:flex;flex-direction:column;gap:6px;margin:22px 0 6px;font-size:clamp(24px,3.4vw,30px)}
+.ygb-faq-title .kicker{font-family:var(--font-sans-ui);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+.ygb-faq-item{border-bottom:1px solid var(--line)}
+.ygb-faq-item summary{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 2px;cursor:pointer;list-style:none;transition:color var(--dur-fast)}
+.ygb-faq-item summary::-webkit-details-marker{display:none}
+.ygb-faq-item summary h3{margin:0;font-family:var(--font-serif-body);font-size:18px;font-weight:700;line-height:1.35;color:var(--ink-title)}
+@media(min-width:768px){.ygb-faq-item summary h3{font-size:20px}}
+.ygb-faq-item summary:hover h3{color:var(--red)}
+.ygb-faq-chevron{flex-shrink:0;width:12px;height:12px;border-right:2px solid var(--navy);border-bottom:2px solid var(--navy);transform:rotate(45deg);transition:transform var(--dur-fast) var(--ease-out);margin-top:-4px}
+.ygb-faq-item[open] .ygb-faq-chevron{transform:rotate(225deg);margin-top:4px}
+.ygb-faq-item[open] summary h3{background-image:linear-gradient(var(--yellow),var(--yellow));background-repeat:no-repeat;background-size:100% 40%;background-position:0 90%}
+.ygb-faq-item p{margin:0;padding:0 2px 22px;max-width:640px;color:var(--ink-body)}
+
 /* Related articles */
 .ygb-related{margin:48px 0 0;font-family:var(--font-sans-ui)}
 .ygb-related>h3{margin:0;padding-bottom:12px;border-bottom:2px solid var(--navy);font-family:var(--font-display);font-weight:800;font-stretch:110%;font-size:24px;letter-spacing:-.01em;text-transform:uppercase}

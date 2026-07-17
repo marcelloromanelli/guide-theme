@@ -43,17 +43,18 @@
 {{ $border_class = "" }}
 {{ end }}
 
-<figure class="{{ $border_class }} lazy">
+<figure class="{{ $border_class }}">
     <picture>
-    <source type="image/webp" data-srcset="{{ $webp_set }}" data-sizes="auto" />
-    <img class="lazyload" data-sizes="auto" src="{{ $src.RelPermalink }}" {{ if $width }} width="{{$width}}" {{ end }}
-        srcset="data:image/jpeg;base64,{{ $placeholder.Content | base64Encode }}" data-src="{{ $src.RelPermalink }}"
-        data-srcset="{{ $src_set }}" width="{{ $image.Width }}" height="{{ $image.Height }}" alt="{{ $alt }}" />
+    <source type="image/webp" srcset="{{ $webp_set }}" sizes="(max-width: 860px) 100vw, 825px" />
+    <img src="{{ $src.RelPermalink }}" srcset="{{ $src_set }}" sizes="(max-width: 860px) 100vw, 825px"
+        loading="lazy" decoding="async" {{ if $width }}width="{{ $width }}"{{ else }}width="{{ $image.Width }}"{{ end }}
+        height="{{ $image.Height }}" alt="{{ $alt }}"
+        style="background:url(data:image/webp;base64,{{ $placeholder.Content | base64Encode }}) center/cover" />
     </picture>
 
     {{ if .Inner }}
     <figcaption>
-        <em>{{ .Inner }}</em>
+        <em>{{ .Inner | markdownify }}</em>
     </figcaption>
     {{ end }}
 </figure>

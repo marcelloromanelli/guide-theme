@@ -4,11 +4,13 @@
     {{ .Content }}
     {{ with .Params.faq }}
     {{ $labels := dict "en" "Frequently asked questions" "es" "Preguntas frecuentes" "it" "Domande frequenti" }}
-    <section class="faq">
-        <h2>{{ index $labels $.Language.Lang | default (index $labels "en") }}</h2>
-        {{ range . }}
-        <h3>{{ .q }}</h3>
-        <p>{{ .a }}</p>
+    <section class="ygb-faq">
+        <h2 class="ygb-faq-title"><span class="kicker">FAQ</span>{{ index $labels $.Language.Lang | default (index $labels "en") }}</h2>
+        {{ range $i, $e := . }}
+        <details class="ygb-faq-item"{{ if eq $i 0 }} open{{ end }}>
+            <summary><h3>{{ $e.q }}</h3><span class="ygb-faq-chevron" aria-hidden="true"></span></summary>
+            <p>{{ $e.a }}</p>
+        </details>
         {{ end }}
     </section>
     {{ end }}
