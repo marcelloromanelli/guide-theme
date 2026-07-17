@@ -3,9 +3,13 @@
 {{ if $hero_url }}
 <div class="ygb-hero{{ if not .IsHome }} ygb-hero--short{{ end }}">
     {{ $hero_750 := "" }}{{ with (.Page.Resources.GetMatch (index "*.jpg")) }}{{ $hero_750 = (.Fill "750x690 webp q65").RelPermalink }}{{ end }}
-    <img class="ygb-hero-img" src="{{ $hero_url }}"
-         srcset="{{ $hero_750 }} 750w, {{ $hero_m }} 828w, {{ $hero_url }} 1250w" sizes="100vw"
-         alt="" fetchpriority="high" decoding="async">
+    <picture>
+        {{/* Phones keep the tall crops at any DPR; wider viewports get the wide crop */}}
+        <source media="(max-width:767px)" srcset="{{ $hero_750 }} 750w, {{ $hero_m }} 828w" sizes="100vw">
+        <img class="ygb-hero-img" src="{{ $hero_url }}"
+             srcset="{{ $hero_url }} 1250w" sizes="100vw"
+             alt="" fetchpriority="high" decoding="async">
+    </picture>
     <div class="ygb-hero-scrim">
         <div class="ygb-hero-content ygb-reveal">
             {{ if .IsHome }}

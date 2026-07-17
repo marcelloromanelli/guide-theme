@@ -141,8 +141,9 @@ a:hover{color:var(--red)}
 @media(min-width:1024px){.ygb-hero--short{min-height:66vh}}
 .ygb-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
 @media(min-width:1024px){
-  .ygb-hero-img{position:fixed;top:0;left:0;height:78vh}
-  .ygb-hero--short .ygb-hero-img{height:66vh}
+  /* Fixed (parallax) image sized to the viewport, clipped by the hero's
+     clip-path:inset(0) — covers any content-driven hero height. */
+  .ygb-hero-img{position:fixed;top:0;left:0;height:100vh}
 }
 .ygb-hero-scrim{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(rgba(2,48,71,.15),rgba(2,48,71,.7));padding:150px 0 clamp(28px,5vw,72px)}
 .ygb-hero-content{width:100%;max-width:1280px;margin:0 auto;padding:0 var(--gutter)}
