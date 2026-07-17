@@ -1,24 +1,77 @@
-{{ $tag := .Get 0 }}
-{{ with $tag }}{{ printf "<%s>" . | safeHTML }}{{ end }}
-{{ $.Scratch.Set "content" .Inner }}
-{{ $.Scratch.Set "linkCount" 0 }}
+{{- $tag := .Get 0 -}}
+{{- with $tag }}{{ printf "<%s>" . | safeHTML }}{{ end -}}
 
-{{ range where $.Site.Pages.ByPublishDate.Reverse ".Params.seo" "ne" nil }}
-    {{ $match := false }}
-    {{ $tmpPage := . }}
-    {{ $currentLinkCount := $.Scratch.Get "linkCount" }}
-    
-    {{ if lt $currentLinkCount 3 }}
-        {{ range $seoParam := .Params.seo }}
-            {{ $content := ($.Scratch.Get "content") }}
-            {{if and (not $match) (gt (len ($content | findRE $seoParam)) 0) (eq (len ($content | findRE (printf "<a[^>]* title=\"(.*%s.*)\"" $seoParam))) 0) (ne $tmpPage.RelPermalink $.Page.RelPermalink) }}
-                {{ $match = true }}
-                {{ $.Scratch.Set "content" ($content | replaceRE $seoParam (printf "<a href=\"%s\" title=\"%s\" class=\"text-red-800 hover:underline\">%s</a>" $tmpPage.RelPermalink $tmpPage.Title $seoParam ) )  }}
-                {{ $.Scratch.Set "linkCount" (add $currentLinkCount 1) }}
-            {{ end }}
-        {{ end }}
-    {{ end }}
-{{ end }}
+{{/* Per-invocation working content (one paragraph). */}}
+{{- $content := .Inner -}}
 
-{{ $.Scratch.Get "content" | safeHTML }}
-{{ with $tag }}{{ printf "</%s>" . | safeHTML }}{{ end }}
+{{/* --- Mask existing anchors so params never match inside a link. Injected
+       links are ALSO masked as we go, so a later param can never nest inside
+       an anchor we just created. Placeholders are restored at the very end. --- */}}
+{{- $.Scratch.Set "masks" slice -}}
+{{- range $a := findRE "<a[^>]*>[^<]*</a>" $content -}}
+    {{- $masks := $.Scratch.Get "masks" -}}
+    {{- $token := printf "§§L%d§§" (len $masks) -}}
+    {{- $content = replace $content $a $token 1 -}}
+    {{- $.Scratch.Set "masks" ($masks | append $a) -}}
+{{- end -}}
+
+{{/* --- Regex-escape helper chars for RE2 (no quoteMeta in Hugo) --- */}}
+{{- $reChars := slice "\\" "." "[" "]" "(" ")" "{" "}" "*" "+" "?" "|" "^" "$" -}}
+
+{{/* --- Per-page state shared across all invocations on this page --- */}}
+{{- $page := .Page -}}
+
+{{- range where $.Site.Pages.ByPublishDate.Reverse ".Params.seo" "ne" nil -}}
+    {{- $target := . -}}
+    {{- $count := $page.Scratch.Get "seoAutolinkCount" | default 0 -}}
+    {{- $done := $page.Scratch.Get "seoAutolinkTargets" -}}
+    {{- $already := false -}}
+    {{- if $done }}{{ if in $done $target.RelPermalink }}{{ $already = true }}{{ end }}{{ end -}}
+    {{- if and (lt $count 3) (ne $target.RelPermalink $page.RelPermalink) (not $already) -}}
+        {{/* Sort this target's params longest-first so specific wins over generic. */}}
+        {{- $keyed := slice -}}
+        {{- range $p := $target.Params.seo -}}
+            {{- $keyed = $keyed | append (dict "v" $p "l" (len $p)) -}}
+        {{- end -}}
+        {{- $params := slice -}}
+        {{- range (sort $keyed "l" "desc") -}}{{ $params = $params | append .v }}{{- end -}}
+        {{- range $param := $params -}}
+            {{- $curCount := $page.Scratch.Get "seoAutolinkCount" | default 0 -}}
+            {{- $curDone := $page.Scratch.Get "seoAutolinkTargets" -}}
+            {{- $skip := false -}}
+            {{- if $curDone }}{{ if in $curDone $target.RelPermalink }}{{ $skip = true }}{{ end }}{{ end -}}
+            {{- if and (lt $curCount 3) (not $skip) -}}
+                {{- $escaped := $param -}}
+                {{- range $c := $reChars -}}
+                    {{- $escaped = replace $escaped $c (printf "\\%s" $c) -}}
+                {{- end -}}
+                {{- $pattern := printf "(?i)\\b%s\\b" $escaped -}}
+                {{- if findRE $pattern $content 1 -}}
+                    {{/* Capture the ORIGINAL matched text to use as anchor text. */}}
+                    {{- $orig := index (findRE $pattern $content 1) 0 -}}
+                    {{/* Guard $ in literals so they are not treated as group refs. */}}
+                    {{- $safeTitle := replace $target.Title "$" "$$" -}}
+                    {{- $safeText := replace $orig "$" "$$" -}}
+                    {{- $tgts := $page.Scratch.Get "seoAutolinkTargets" | default slice -}}
+                    {{- $page.Scratch.Set "seoAutolinkTargets" ($tgts | append $target.RelPermalink) -}}
+                    {{- $anchor := printf "<a href=\"%s\" title=\"%s\" class=\"text-red-800 hover:underline\">%s</a>" $target.RelPermalink $safeTitle $safeText -}}
+                    {{/* Mask the injected anchor immediately with a placeholder. */}}
+                    {{- $masks := $.Scratch.Get "masks" -}}
+                    {{- $token := printf "§§L%d§§" (len $masks) -}}
+                    {{- $content = replaceRE $pattern $token $content 1 -}}
+                    {{- $.Scratch.Set "masks" ($masks | append $anchor) -}}
+                    {{- $page.Scratch.Set "seoAutolinkCount" (add $curCount 1) -}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
+{{/* --- Restore all placeholders (original + injected anchors) --- */}}
+{{- range $i, $a := ($.Scratch.Get "masks") -}}
+    {{- $token := printf "§§L%d§§" $i -}}
+    {{- $content = replace $content $token $a 1 -}}
+{{- end -}}
+
+{{- $content | safeHTML -}}
+{{- with $tag }}{{ printf "</%s>" . | safeHTML }}{{ end -}}
