@@ -1,0 +1,29 @@
+{{- /* Lazy GetYourGuide widget loader: injects the partner script only when a
+       widget container approaches the viewport. Pages without widgets never
+       load it. Skips itself if the script is already present (e.g. an eager
+       GTM tag — pause that tag in GTM so this loader owns the load). */ -}}
+<script>
+(function () {
+    var els = document.querySelectorAll('[data-gyg-widget]');
+    if (!els.length) return;
+    var loaded = false;
+    function load() {
+        if (loaded) return;
+        loaded = true;
+        if (document.querySelector('script[src*="widget.getyourguide.com"]')) return;
+        var s = document.createElement('script');
+        s.async = true;
+        s.defer = true;
+        s.src = 'https://widget.getyourguide.com/dist/pa.umd.production.min.js';
+        s.setAttribute('data-gyg-partner-id', '{{ .Site.Params.affiliate.getyourguide }}');
+        document.head.appendChild(s);
+    }
+    if (!('IntersectionObserver' in window)) { load(); return; }
+    var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting) { io.disconnect(); load(); return; }
+        }
+    }, { rootMargin: '600px 0px' });
+    els.forEach(function (el) { io.observe(el); });
+})();
+</script>

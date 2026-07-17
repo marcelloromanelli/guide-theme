@@ -1,0 +1,11 @@
+{{- /* params: dict "variant" ("navy"|"cream") "size" ("md"|"lg") */ -}}
+{{- $variant := .variant | default "navy" -}}
+{{- $lg := eq (.size | default "md") "lg" -}}
+<span class="ygb-logo{{ if eq $variant "cream" }} ygb-logo--cream{{ end }}">
+    <span class="ygb-logo-plate"{{ if $lg }} style="width:52px;height:52px;font-size:21.8px"{{ end }}><span class="yg">YG</span><span class="b">B.</span></span>
+    <span class="ygb-wordmark">
+        <span class="top"{{ if $lg }} style="font-size:12.5px"{{ end }}>Your Guide</span>
+        <span class="rule"{{ if $lg }} style="margin:5px 0"{{ end }}></span>
+        <span class="name"{{ if $lg }} style="font-size:19.8px"{{ end }}>Barcelona</span>
+    </span>
+</span>

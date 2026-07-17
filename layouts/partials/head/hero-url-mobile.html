@@ -1,0 +1,7 @@
+{{- /* Returns the mobile hero crop (WebP), or empty string.
+       Lookup MUST stay in sync with head/hero-url.html + partials/header-image.html */ -}}
+{{- $url := "" -}}
+{{- with (.Page.Resources.GetMatch (index "*.jpg")) -}}
+  {{- $url = (.Fill "828x760 webp q65").RelPermalink -}}
+{{- end -}}
+{{- $url -}}

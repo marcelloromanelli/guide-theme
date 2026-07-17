@@ -1,11 +1,44 @@
-{{ partial "footer/lang-switcher.html" . }}
-{{ partial "footer/gtm.html" . }}
-{{ partial "consent.html" . }}
+{{ partial "newsletter.html" . }}
 {{- $csLang := .Site.Language.Lang -}}
 {{- $cs := dict "en" "Cookie settings" "es" "Configuración de cookies" "it" "Impostazioni cookie" -}}
 {{- $csLabel := index $cs $csLang -}}
 {{- if not $csLabel }}{{ $csLabel = index $cs "en" }}{{ end -}}
-<div class="text-center text-sm text-gray-500 py-4">
-    <button type="button" class="underline hover:text-gray-700"
-            onclick="if(window.ygbConsentReopen)window.ygbConsentReopen();">{{ $csLabel }}</button>
-</div>
+<footer class="ygb-footer">
+    <div class="ygb-strip"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="ygb-footer-inner">
+        <div class="ygb-footer-cols">
+            <div class="ygb-footer-brand">
+                <a href="{{ .Site.Home.Permalink }}" style="text-decoration:none">
+                    {{- partial "logo.html" (dict "variant" "cream" "size" "lg") -}}
+                </a>
+                <p class="ygb-footer-tagline">{{ i18n "description" }}</p>
+            </div>
+            {{ with .Site.Menus.main }}
+            <div class="ygb-footer-col">
+                <div class="ygb-footer-col-title">{{ i18n "guideColTitle" | default "Guide" }}</div>
+                <ul>
+                    {{ range . }}
+                    <li><a href="{{ .URL | absURL }}">{{ .Name }}</a></li>
+                    {{ end }}
+                </ul>
+            </div>
+            {{ end }}
+        </div>
+        <div class="ygb-footer-base">
+            <div class="ygb-footer-langs">
+                {{ range .AllTranslations }}
+                    {{ if eq .Language.Lang $.Language.Lang }}
+                        <span aria-current="true">{{ .Language.Label }}</span>
+                    {{ else }}
+                        <a href="{{ .Permalink }}">{{ .Language.Label }}</a>
+                    {{ end }}
+                {{ end }}
+            </div>
+            <button type="button" class="ygb-footer-cookie"
+                    onclick="if(window.ygbConsentReopen)window.ygbConsentReopen();">{{ $csLabel }}</button>
+        </div>
+    </div>
+</footer>
+{{ partial "footer/gtm.html" . }}
+{{ partial "consent.html" . }}
+{{ partial "gyg-loader.html" . }}

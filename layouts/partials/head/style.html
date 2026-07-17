@@ -1,7 +1,8 @@
+<link rel="preload" as="font" type="font/woff2" href="{{ "/fonts/archivo-var.woff2" | relURL }}" crossorigin>
 {{ if hugo.IsServer }}
-    {{ $style := resources.Get "css/styles.css" | postCSS (dict "config" "./assets/css/postcss.config.js") | fingerprint }}
-    <link rel="stylesheet" href="{{ $style.Permalink }}" data>
+    {{ $style := resources.Get "css/ygb.css" | fingerprint }}
+    <link rel="stylesheet" href="{{ $style.Permalink }}">
 {{ else }}
-    {{ $style := resources.Get "css/styles.css" | postCSS (dict "config" "./assets/css/postcss.config.js")  | minify | fingerprint }}
+    {{ $style := resources.Get "css/ygb.css" | minify | fingerprint }}
     <link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}">
 {{ end }}

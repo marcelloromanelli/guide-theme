@@ -6,14 +6,11 @@
 -}}
 {{- $t := index $strings $lang -}}
 {{- if not $t }}{{ $t = index $strings "en" }}{{ end -}}
-<div id="ygb-consent-banner" role="dialog" aria-label="Cookie consent" hidden
-     class="fixed bottom-0 inset-x-0 z-50 bg-white shadow-md border-t border-gray-200 px-4 py-3 md:px-12 lg:px-24 text-sm text-gray-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-    <p class="flex-1">{{ $t.msg }}</p>
-    <div class="flex gap-2 shrink-0">
-        <button type="button" id="ygb-consent-essential"
-                class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100">{{ $t.essential }}</button>
-        <button type="button" id="ygb-consent-accept"
-                class="px-4 py-2 rounded bg-black text-white hover:bg-gray-800">{{ $t.accept }}</button>
+<div id="ygb-consent-banner" role="dialog" aria-label="Cookie consent" hidden class="ygb-consent">
+    <p class="ygb-consent-msg">{{ $t.msg }}</p>
+    <div class="ygb-consent-actions">
+        <button type="button" id="ygb-consent-essential" class="ygb-btn ygb-btn--outline ygb-btn--sm">{{ $t.essential }}</button>
+        <button type="button" id="ygb-consent-accept" class="ygb-btn ygb-btn--dark ygb-btn--sm">{{ $t.accept }}</button>
     </div>
 </div>
 <script>

@@ -1,35 +1,30 @@
-<div class="bg-white flex flex-wrap flex-col xl:flex-row content-around mb-0">
+{{ if or .Params.address .Params.opening_hours .Params.ticket_url }}
+<div class="ygb-infobox">
     {{ with .Params.address }}
-    <div class="align-top w-full xl:w-1/2 flex">
-        <span class="ico-map-pin w-2/12 h-12 mr-4 "></span>
-        <div class="w-10/12">
-            {{ replace . "," "<br />" | safeHTML }}
-            <br />
-            <a target="_blank" rel="noopener nofollow"
-            href="https://maps.google.com/maps?f=d&hl=en&saddr=&daddr={{  replace . " " "+" }}">Click here to get directions</a>
+    <div class="ygb-infobox-cell">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <div>
+            {{ replace . "," "<br />" | safeHTML }}<br />
+            <a class="ygb-link" target="_blank" rel="noopener nofollow" href="https://maps.google.com/maps?f=d&hl=en&saddr=&daddr={{ replace . " " "+" }}">Get directions</a>
         </div>
     </div>
     {{ end }}
-
     {{ if .Params.opening_hours }}
-    <div class="align-top w-full xl:w-1/2 flex">
-        <span class="ico-clock w-2/12 h-12 mr-4"></span>
-        <div class="w-10/12">
-            {{ range .Params.opening_hours }}
-                {{ . }}<br />
-            {{ end }}
+    <div class="ygb-infobox-cell">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <div>
+            {{ range .Params.opening_hours }}{{ . }}<br />{{ end }}
         </div>
     </div>
     {{ end }}
-</div>
-
-{{ with .Params.ticket_url }}
-<div class="align-top w-full xl:w-1/2 flex">
-    <span class="ico-plane-tickets w-2/12 h-12 mr-4"></span>
-    <div class="w-10/12">
-        <a href="{{ . }}" target="_blank" rel="noopener nofollow">Safely buy your ticket here!</a>
-        <br />
-        <small class="text-gray-500">Cancel up to <strong>24 hours</strong> in advance to receive a full refund.</small>
+    {{ with .Params.ticket_url }}
+    <div class="ygb-infobox-cell">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>
+        <div>
+            <a class="ygb-link" href="{{ . }}" target="_blank" rel="noopener nofollow">Safely buy your ticket here!</a><br />
+            <small>Cancel up to <strong>24 hours</strong> in advance to receive a full refund.</small>
+        </div>
     </div>
+    {{ end }}
 </div>
 {{ end }}

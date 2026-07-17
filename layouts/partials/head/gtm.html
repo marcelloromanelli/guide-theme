@@ -25,13 +25,21 @@
         } catch (e) {}
     })();
 </script>
-<!-- Google Tag Manager -->
-<script>(function (w, d, s, l, i) {
-    w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-            new Date().getTime(), event: 'gtm.js'
-    }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-            'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', '{{ .Site.Params.gtm.id }}');</script>
+<!-- Google Tag Manager — deferred to first interaction (scroll/tap/key) to keep it off the critical load. Consent defaults above are queued in dataLayer and picked up on load. -->
+<script>(function (w, d) {
+    var loaded = false;
+    var evts = ['pointerdown', 'keydown', 'scroll', 'touchstart'];
+    function loadGTM() {
+        if (loaded) return;
+        loaded = true;
+        evts.forEach(function (t) { w.removeEventListener(t, loadGTM, { passive: true, capture: true }); });
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+            j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;
+            f.parentNode.insertBefore(j, f);
+        })(w, d, 'script', 'dataLayer', '{{ .Site.Params.gtm.id }}');
+    }
+    evts.forEach(function (t) { w.addEventListener(t, loadGTM, { passive: true, capture: true }); });
+})(window, document);</script>
 <!-- End Google Tag Manager -->

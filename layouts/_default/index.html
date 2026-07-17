@@ -1,57 +1,93 @@
 {{ define "main" }}
-<section class="single-block-wrapper">
-    <div class="container mx-auto">
-        <div class="container max-w-5xl mx-auto -mt-32">
-            <div class="mx-0 sm:mx-6">
-                <div
-                    class="content-wrapper bg-white w-full p-8 md:px-24 md:py-16 text-xl text-gray-800 leading-normal rounded">
-                    {{ .Content }}
-                </div>
+
+{{ $guide := .Site.GetPage "/TRAVEL-GUIDE" }}
+
+{{/* 1 — Don't miss: curated icons from params.home.featured (first = feature) */}}
+{{ $featured := slice }}
+{{ range .Site.Params.home.featured }}
+    {{ with $.Site.GetPage . }}{{ $featured = $featured | append . }}{{ end }}
+{{ end }}
+{{ with $featured }}
+<section class="ygb-section">
+    <div class="ygb-section-head">
+        <h2>{{ i18n "dontMiss" | default "Don't miss" }}</h2>
+    </div>
+    {{- partial "big-card.html" (index . 0) -}}
+    {{ with after 1 . }}
+    <div class="ygb-catgrid ygb-catgrid--push">
+        {{ range . }}
+        {{- partial "category-card.html" . -}}
+        {{ end }}
+    </div>
+    {{ end }}
+</section>
+{{ end }}
+
+{{/* 2 — Tours band: the icons prime intent, this converts it (loader script via GTM) */}}
+<section class="ygb-section">
+    <div class="ygb-tours">
+        <div class="ygb-tours-head">
+            <div>
+                <span class="kicker">GetYourGuide</span>
+                <h2>{{ i18n "topToursTitle" | default "Book the best of Barcelona" }}</h2>
+                <p>{{ i18n "topToursBlurb" | default "Skip-the-line tickets and top-rated tours, hand-picked for your trip." }}</p>
             </div>
-
-            <div class="mx-0 sm:mx-6">
-                {{ $paginator := .Paginate (where .Data.Pages "Type" "post") }}
-                {{- if $paginator.Pages -}}
-                <div class="bg-white w-full px-8 md:px-24 text-xl text-gray-800 leading-normal">
-                    {{ range $paginator.Pages }}
-                    {{- partial "horizontal-card.html" . -}}
-                    {{ end }}
-
-                    <div class="pagination mt-5 pt-4">
-                        {{ template "_internal/pagination.html" . }}
-                    </div>
-                </div>
-                {{ end }}
-
-                {{- if .Sections -}}
-                <div class="bg-white w-full px-8 md:px-24 text-xl text-gray-800 leading-normal">
-                    <hr />
-                    {{ range .Sections }}
-                    {{- if .Data.Pages -}}
-                    <a href="{{ .Permalink }}">
-                        <h2 class="mt-16 hover:text-red-800">{{ .Title }}</h2>
-                    </a>
-                    {{- if .Content -}}
-                    <p class="text-secondary">
-                        {{ .Content | truncate 200 | plainify | htmlUnescape }}
-                        <a class="text-red-800 hover:underline ml-2" href="{{ .Permalink }}">
-                            {{ i18n "readmore"}}
-                        </a>
-                    </p>
-                    {{- end -}}
-
-
-
-                    {{- range $i, $e := .Data.Pages -}}
-                    {{- partial "horizontal-card.html" . -}}
-                    {{ end }}
-                    {{ end }}
-                    {{ end }}
-                </div>
-            </div>
+            {{ with .Site.GetPage "/TRAVEL-GUIDE/TOURS-AND-ACTIVITIES" }}
+            <a class="ygb-btn ygb-btn--outline-inverse" href="{{ .Permalink }}">{{ i18n "viewAllTours" | default "All tours & activities" }}</a>
             {{ end }}
+        </div>
+        <div class="ygb-tours-widget">
+            <div data-gyg-widget="auto" data-gyg-locale-code="{{ i18n "gygLocale" | default "en-US" }}" data-gyg-partner-id="{{ .Site.Params.affiliate.getyourguide }}"></div>
         </div>
     </div>
 </section>
+
+{{/* 3 — Pillars: main-menu pages in nav order (fall back to TRAVEL-GUIDE sections) */}}
+{{ $pillars := slice }}
+{{ range .Site.Menus.main }}{{ with .Page }}{{ $pillars = $pillars | append . }}{{ end }}{{ end }}
+{{ if not $pillars }}
+    {{ $pillars = .Sections }}
+    {{ with $guide }}{{ with .Sections }}{{ $pillars = . }}{{ end }}{{ end }}
+{{ end }}
+{{ with $pillars }}
+<section class="ygb-section">
+    <div class="ygb-section-head">
+        <h2>{{ i18n "exploreSections" | default "Explore by section" }}</h2>
+    </div>
+    <div class="ygb-catgrid">
+        {{ range . }}
+        {{- partial "category-card.html" . -}}
+        {{ end }}
+    </div>
+</section>
+{{ end }}
+
+{{/* 4 — Latest guides: six freshest, no pagination */}}
+{{ $latest := where .Site.RegularPages "Type" "post" | complement $featured | first 6 }}
+{{ with $latest }}
+<section class="ygb-section">
+    <div class="ygb-section-head">
+        <h2>{{ i18n "latestGuides" | default "Latest guides" }}</h2>
+        {{ with $guide }}<a class="ygb-section-link" href="{{ .Permalink }}">{{ i18n "browseAllGuides" | default "Browse all guides" }} &rarr;</a>{{ end }}
+    </div>
+    {{ range . }}
+    {{- partial "horizontal-card.html" . -}}
+    {{ end }}
+</section>
+{{ end }}
+
+{{/* 5 — The story: home prose as a designed editorial band (kept for SEO), closes into the newsletter */}}
+{{ with .Content }}
+<section class="ygb-section">
+    <div class="ygb-essay">
+        <div class="ygb-essay-head">
+            <span class="kicker">{{ $.Title }}</span>
+            <h2>{{ i18n "whyBarcelona" | default "Why Barcelona" }}</h2>
+            <p class="ygb-essay-byline">{{ i18n "essayByline" | default "By Sam · Barcelona" }}</p>
+        </div>
+        <div class="ygb-content ygb-essay-body">{{ . }}</div>
+    </div>
+</section>
+{{ end }}
 
 {{ end }}

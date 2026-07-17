@@ -1,56 +1,39 @@
 {{ define "main" }}
-<section class="single-block-wrapper">
-    <div class="container mx-auto">
-        <div class="container max-w-5xl mx-auto -mt-32">
-            <div class="mx-0 sm:mx-6">
-                <div class="content-wrapper bg-white w-full p-8 md:px-24 md:py-16 text-xl text-gray-800 leading-normal rounded">
-                    {{ .Content }}
-                </div>
-            </div>
+{{ $hero := partial "head/hero-url.html" . }}
+{{ if not $hero }}
+<header class="ygb-list-header ygb-reveal">
+    <span class="kicker">{{ i18n "sectionKicker" | default "Section" }} · {{ len .RegularPagesRecursive }} {{ i18n "guides" | default "guides" }}</span>
+    <h1>{{ .Title | markdownify }}</h1>
+    {{ with .Description }}<p class="ygb-list-standfirst">{{ . }}</p>{{ end }}
+</header>
+{{ end }}
 
-            <div class="mx-0 sm:mx-6">
-                {{ $paginator := .Paginate (where .Data.Pages "Type" "post") }}
-                {{- if $paginator.Pages -}}
-                <div class="bg-white w-full px-8 md:px-24 text-xl text-gray-800 leading-normal">
-                    {{ range $paginator.Pages }}
-                    {{- partial "horizontal-card.html" . -}}
-                    {{ end }}
-            
-                    <div class="pagination mt-5 pt-4">
-                        {{ template "_internal/pagination.html" . }}
-                    </div>
-                </div>
-                {{ end }}
-                
-                {{- if .Sections -}}
-                <div class="bg-white w-full px-8 md:px-24 text-xl text-gray-800 leading-normal">
-                    <hr />
-                    {{ range .Sections }}
-                    {{- if .Data.Pages -}}
-                    <a href="{{ .Permalink }}">
-                        <h2 class="mt-16 hover:text-red-800">{{ .Title }}</h2>
-                    </a>
-                    {{- if .Content -}}
-                    <p class="text-secondary">
-                        {{ .Content | truncate 200 | plainify | htmlUnescape }}
-                        <a class="text-red-800 hover:underline ml-2" href="{{ .Permalink }}">
-                            {{ i18n "readmore"}}
-                        </a>
-                    </p>
-                    {{- end -}}
-            
-            
-            
-                    {{- range $i, $e := .Data.Pages -}}
-                    {{- partial "horizontal-card.html" . -}}
-                    {{ end }}
-                    {{ end }}
-                    {{ end }}
-                </div>
-            </div>
-            {{ end }}
-        </div>
+{{ with .Content }}
+<div class="ygb-content ygb-content--top">{{ . }}</div>
+{{ end }}
+
+{{ $paginator := .Paginate (where .Data.Pages "Type" "post") }}
+{{ if $paginator.Pages }}
+<section class="ygb-section">
+    {{ range $paginator.Pages }}
+    {{- partial "horizontal-card.html" . -}}
+    {{ end }}
+    <div class="ygb-pagination">
+        {{ template "_internal/pagination.html" . }}
     </div>
 </section>
+{{ end }}
 
+{{ if .Sections }}
+<section class="ygb-section">
+    <div class="ygb-section-head">
+        <h2>{{ i18n "browseSubsections" | default "Browse subsections" }}</h2>
+    </div>
+    <div class="ygb-catgrid ygb-catgrid--3">
+        {{ range .Sections }}
+        {{- partial "category-card.html" . -}}
+        {{ end }}
+    </div>
+</section>
+{{ end }}
 {{ end }}

@@ -1,0 +1,28 @@
+{{ $src := "" }}
+{{ with .Resources.GetMatch "*.jpg" }}
+    {{ $src = . }}
+{{ else }}
+    {{ with index .RegularPagesRecursive 0 }}
+        {{ with .Resources.GetMatch "*.jpg" }}
+            {{ $src = . }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+<a class="ygb-catcard" href="{{ .Permalink }}">
+    {{ with $src }}
+    {{ $sm := .Fill "300x400 webp q80" }}
+    {{ $md := .Fill "420x560 webp q78" }}
+    {{ $lg := .Fill "600x800 webp q80" }}
+    <img class="ygb-catcard-img" src="{{ $lg.RelPermalink }}"
+         srcset="{{ $sm.RelPermalink }} 300w, {{ $md.RelPermalink }} 420w, {{ $lg.RelPermalink }} 600w"
+         sizes="(min-width:900px) 22vw, 45vw"
+         alt="{{ $.Title }}" width="600" height="800" loading="lazy" decoding="async">
+    {{ else }}
+    <div class="ygb-catcard-img" style="background:var(--navy)"></div>
+    {{ end }}
+    <div class="ygb-catcard-scrim">
+        <div class="ygb-catcard-tick"></div>
+        <h3>{{ .Title }}</h3>
+        <span class="ygb-catcard-count">{{ len .RegularPagesRecursive }} {{ i18n "guides" | default "guides" }}</span>
+    </div>
+</a>

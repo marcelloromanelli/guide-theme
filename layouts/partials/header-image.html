@@ -1,12 +1,22 @@
 {{ $hero_url := partial "head/hero-url.html" . }}
+{{ $hero_m := partial "head/hero-url-mobile.html" . }}
 {{ if $hero_url }}
-<div 
-    class="w-full bg-white lg:bg-fixed bg-cover mt-12 lg:mt-24 flex items-center justify-center"
-    style="background-image:url('{{ $hero_url }}'); height: 75vh;"
->
-        <h1 class="font-bold break-normal text-gray-100 header-title text-center p-8 lg:text-6xl">
-            {{ .Title | markdownify }}
-        </h1>
+<div class="ygb-hero{{ if not .IsHome }} ygb-hero--short{{ end }}">
+    {{ $hero_750 := "" }}{{ with (.Page.Resources.GetMatch (index "*.jpg")) }}{{ $hero_750 = (.Fill "750x690 webp q65").RelPermalink }}{{ end }}
+    <img class="ygb-hero-img" src="{{ $hero_url }}"
+         srcset="{{ $hero_750 }} 750w, {{ $hero_m }} 828w, {{ $hero_url }} 1250w" sizes="100vw"
+         alt="" fetchpriority="high" decoding="async">
+    <div class="ygb-hero-scrim">
+        <div class="ygb-hero-content ygb-reveal">
+            {{ if .IsHome }}
+            <span class="kicker">EN / ES / IT</span>
+            <h1>{{ i18n "subtitle" | default .Site.Title }}</h1>
+            {{ else }}
+            {{ if eq .Type "post" }}<span class="kicker">{{ with .CurrentSection }}{{ .Title }} · {{ end }}{{ i18n "readingTime" .ReadingTime }}</span>{{ end }}
+            <h1>{{ .Title | markdownify }}</h1>
+            {{ end }}
+            {{ with .Description }}<p class="ygb-standfirst">{{ . }}</p>{{ end }}
+        </div>
+    </div>
 </div>
-
 {{ end }}
