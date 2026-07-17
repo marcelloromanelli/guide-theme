@@ -10,9 +10,9 @@
 {{ end }}
 <a class="ygb-catcard" href="{{ .Permalink }}">
     {{ with $src }}
-    {{ $sm := .Fill "300x400 webp q80" }}
-    {{ $md := .Fill "420x560 webp q78" }}
-    {{ $lg := .Fill "600x800 webp q80" }}
+    {{ $sm := .Fill "300x400 webp q70" }}
+    {{ $md := .Fill "420x560 webp q70" }}
+    {{ $lg := .Fill "600x800 webp q70" }}
     <img class="ygb-catcard-img" src="{{ $lg.RelPermalink }}"
          srcset="{{ $sm.RelPermalink }} 300w, {{ $md.RelPermalink }} 420w, {{ $lg.RelPermalink }} 600w"
          sizes="(min-width:900px) 22vw, 45vw"

@@ -1,11 +1,12 @@
 <a class="ygb-bigcard" href="{{ .Permalink }}">
     {{ $original_image := .Resources.GetMatch "*.jpg" }}
     {{ if $original_image }}
-    {{ $sm := $original_image.Fill "720x540 webp q80" }}
-    {{ $md := $original_image.Fill "960x540 webp q80" }}
-    {{ $lg := $original_image.Fill "1440x810 webp q80" }}
+    {{ $sm := $original_image.Fill "720x540 webp q70" }}
+    {{ $md := $original_image.Fill "960x540 webp q70" }}
+    {{ $lg := $original_image.Fill "1200x675 webp q70" }}
+    {{ $xl := $original_image.Fill "1440x810 webp q70" }}
     <img class="ygb-bigcard-img" src="{{ $lg.RelPermalink }}"
-         srcset="{{ $sm.RelPermalink }} 720w, {{ $md.RelPermalink }} 960w, {{ $lg.RelPermalink }} 1440w"
+         srcset="{{ $sm.RelPermalink }} 720w, {{ $md.RelPermalink }} 960w, {{ $lg.RelPermalink }} 1200w, {{ $xl.RelPermalink }} 1440w"
          sizes="(min-width:1345px) 1152px, 92vw"
          alt="{{ .Title }}" width="1440" height="810" loading="lazy" decoding="async">
     {{ else }}

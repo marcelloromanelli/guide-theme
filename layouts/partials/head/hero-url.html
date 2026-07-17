@@ -2,6 +2,6 @@
        Lookup MUST stay in sync with partials/header-image.html */ -}}
 {{- $url := "" -}}
 {{- with (.Page.Resources.GetMatch (index "*.jpg")) -}}
-  {{- $url = (.Fill "1250x600 webp q80").RelPermalink -}}
+  {{- $url = (.Fill "1250x600 webp q70").RelPermalink -}}
 {{- end -}}
 {{- $url -}}

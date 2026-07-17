@@ -1,8 +1,8 @@
 <a class="ygb-hcard" href="{{ .Permalink }}">
     {{ $original_image := .Resources.GetMatch "*.jpg" }}
     {{ if $original_image }}
-    {{ $sm := $original_image.Fill "260x195 webp q80" }}
-    {{ $lg := $original_image.Fill "520x390 webp q80" }}
+    {{ $sm := $original_image.Fill "260x195 webp q70" }}
+    {{ $lg := $original_image.Fill "520x390 webp q70" }}
     <div class="ygb-hcard-img">
         <img src="{{ $lg.RelPermalink }}"
              srcset="{{ $sm.RelPermalink }} 260w, {{ $lg.RelPermalink }} 520w"
