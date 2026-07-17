@@ -43,4 +43,8 @@
     {{ partial "head/schema.html" . }}
     {{ partial "head/opengraph.html" . }}
     {{ partial "head/gtm.html" . }}
+    {{ if or .IsHome (.HasShortcode "gyg_widget_auto") (.HasShortcode "gyg_widget") }}
+    {{ "<!-- GetYourGuide Analytics -->" | safeHTML }}
+    <script async defer src="https://widget.getyourguide.com/dist/pa.umd.production.min.js" data-gyg-partner-id="{{ .Site.Params.affiliate.getyourguide }}"></script>
+    {{ end }}
 </head>
