@@ -25,7 +25,11 @@
         } catch (e) {}
     })();
 </script>
-<!-- Google Tag Manager — deferred to first interaction (scroll/tap/key) to keep it off the critical load. Consent defaults above are queued in dataLayer and picked up on load. -->
+<!-- Google Tag Manager — deferred to first interaction (scroll/tap/key) with a
+     3.5s idle fallback. Without the fallback, visitors who never interact send
+     ZERO pings — not even the cookieless Consent Mode ones — so GA4 can neither
+     count nor model them (observed as the DAU collapse of 2026-07-17..19).
+     Consent defaults above are queued in dataLayer and picked up on load. -->
 <script>(function (w, d) {
     var loaded = false;
     var evts = ['pointerdown', 'keydown', 'scroll', 'touchstart'];
@@ -41,5 +45,7 @@
         })(w, d, 'script', 'dataLayer', '{{ .Site.Params.gtm.id }}');
     }
     evts.forEach(function (t) { w.addEventListener(t, loadGTM, { passive: true, capture: true }); });
+    if (w.requestIdleCallback) { w.requestIdleCallback(loadGTM, { timeout: 3500 }); }
+    else { w.setTimeout(loadGTM, 3500); }
 })(window, document);</script>
 <!-- End Google Tag Manager -->
